@@ -3,65 +3,68 @@
 // @author		gwin
 // @namespace	https://github.com/naokigwin
 // @include		http://www.nicovideo.jp/watch/*
-// @version		4.0
+// @version		4.0.1
 // @installURL 		https://userscripts.org/scripts/source/136812.user.js
 // @downloadURL	https://userscripts.org/scripts/source/136812.meta.js
 // @updateURL	https://userscripts.org/scripts/source/136812.meta.js
 // @description	Qwatchをキーボードで操作するGreaseMonkeyスクリプト
 // ==/UserScript==
 
-//【更新履歴】
-//ver 4.0 (2012/10/29更新)
-//　「動画再生プレーヤー」フォーカス強制解除モードのON("B"キー)/OFF("N"キー)機能を追加。
-//　　→コメントを入力する場合は、"N"キーでフォーカス強制解除モードをOFFにしてください。
-//　　　フォーカス強制解除モードをONにする場合は、「動画再生プレーヤー」外をクリックして手動でフォーカスを外してから"B"キーを押して下さい。
-//　ショートカットキーを押した時の説明を左上に表示するようにした。
-//　巻き戻し/早送り(←/→)時、移動可能な秒数まで移動先をずらすように機能を変更。
-//　「動画再生プレーヤー」スクロール基準要素の初期値変更（QWatchへの対応。"playerContainerWrapper"）
-//ver.3.0 （2012/10/22更新)
-//　ニコニコQ(Qwatch)への対応
-//　コメント入力欄がswf要素になった(Qwatchでの仕様変更)ため、swfからの自動フォーカス解除機能をoffに変更(これをしないとコメントが入力できなくなる)。
-//　　→コメント入力やクリックでの動画プレイヤー操作後、ショートカットキーを有効にするためには動画プレーヤー(swf)外をクリックしてswfからフォーカスを外してください。
-//　動画情報(i)機能のデザイン崩れを修正。
-//　ショートカットキー[ctrl+PageUp/PageDown]でブラウザ側でのタブ移動を行った時にでも動画移動が発生していた不具合を修正。
-//ver.2.1　(2012/07/01更新)
-//　「もっと動画を見る」へスクロールする機能を追加(キー割り当てを変更(S)(D))。
-//　「動画再生プレーヤー」へスクロールする機能の不具合を修正。
-//　「動画再生プレーヤー」への自動スクロールコール部分に起因する不具合を修正。
-//ver.2.0　(2012/07/01更新)
-//　オプション設定画面、ヘルプ画面を追加。
-//ver.1.5　(2012/06/29更新)
-//　Chrome対応　(イベントの変更：DOMNodeInserted→DOMSubtreeModified、keypress→keydown。
-//　　　　　　　　スクリプトの挿入先の変更：location.href→<script>タグ)
-//ver.1.4.2　(2012/06/28更新)
-//プレイリスト上の動画移動時、チャンネル動画をまたぐと、動画情報(i)にユーザーお気に入りボタンが表示される問題を修正(スタイルシートに"!important"を追加)
-//次の動画、前の動画、でNicoPlayerConnectorまたはPlayerConfigが取得ができていない状態のときに、何もしないように変更。
-//ver.1.4.1　(2012/06/27更新)
-//　ページ更新を伴わない動画読み込み時の関数多重コールを防ぐための修正。
-//　namespaceの変更。
-//ver.1.4　(2012/06/26更新)
-//　ページ更新を伴わない動画読み込み時にも動画情報の内容が更新されるようにした。
-//　最初から動画情報を表示する機能を追加(SHOW_vInfo_ONLOAD　true:有効、false:無効)
-//　動画プレーヤの位置を基準にスクロールする機能(s)の実装
-//　ページ読み込み時や動画読み込み時に動画プレーヤの位置を基準に自動スクロールする機能を追加。
-//　　(AUTO_SCROLL true:有効、false:無効 SCROLL_VALUE:動画プレーヤより上に確保するスペースのピクセル数)
-//　ページ更新を伴わない動画読み込み時にも動画情報の内容が更新されるようにした。
-//　コメント表示非表示の切り替え(新方式)のキー割り当て(f)を削除
-//ver.1.3　(2012/06/25更新)
-//　画面左上にサムネイル、投稿日、再生コメントマイリスト数、投稿者名(チャンネル動画の場合はチャンネル名)を表示する機能の実装(i)
-//ver.1.2　(2012/06/24更新)
-//　ZeroWatch側の機能(c:コメント入力欄へのカーソル移動)に上書きされていた、コメントの表示非表示切り替え機能(旧方式)のキー割り当てを変更(v)
-//　コメントの表示非表示切り替え機能(新方式)の実装(f)
-//　スクリプト終了機能(q)の実装
-//ver.1.1　(2012/06/24更新)
-//　処理待ち、イベントリスナ登録の方法を変更。エラー強制終了時にイベントリスナを全て解除。
-//ver.1.0.3　(2012/06/23更新)
-//　ニコ生、Nsenで動作しないように@include文を修正。
-//ver.1.0.2　(2012/06/23更新)
-//　"text"タイプ以外の"INPUT"要素にフォーカスが当たっている場合でも、キーボード操作が無効になっていた不具合を修正。
-//vers.1.0.1(2012/06/23更新)
-//　flashplayerのフォーカスが外れない不具合を修正。
-//ver.1.0(2012/06/23更新) 
+/*【更新履歴】
+ver 4.0.1 (2012/10/31更新)
+　巻き戻し/早送り時、0秒未満や総時間以上に移動しようとしてブラウザが固まる不具合を修正。
+ver 4.0 (2012/10/29更新)
+　「動画再生プレーヤー」フォーカス強制解除モードのON("B"キー)/OFF("N"キー)機能を追加。
+　　→コメントを入力する場合は、"N"キーでフォーカス強制解除モードをOFFにしてください。
+　　　フォーカス強制解除モードをONにする場合は、「動画再生プレーヤー」外をクリックして手動でフォーカスを外してから"B"キーを押して下さい。
+　ショートカットキーを押した時の説明を左上に表示するようにした。
+　巻き戻し/早送り(←/→)時、移動可能な秒数まで移動先をずらすように機能を変更。
+　「動画再生プレーヤー」スクロール基準要素の初期値変更（QWatchへの対応。"playerContainerWrapper"）
+ver.3.0 （2012/10/22更新)
+　ニコニコQ(Qwatch)への対応
+　コメント入力欄がswf要素になった(Qwatchでの仕様変更)ため、swfからの自動フォーカス解除機能をoffに変更(これをしないとコメントが入力できなくなる)。
+　　→コメント入力やクリックでの動画プレイヤー操作後、ショートカットキーを有効にするためには動画プレーヤー(swf)外をクリックしてswfからフォーカスを外してください。
+　動画情報(i)機能のデザイン崩れを修正。
+　ショートカットキー[ctrl+PageUp/PageDown]でブラウザ側でのタブ移動を行った時にでも動画移動が発生していた不具合を修正。
+ver.2.1　(2012/07/01更新)
+　「もっと動画を見る」へスクロールする機能を追加(キー割り当てを変更(S)(D))。
+　「動画再生プレーヤー」へスクロールする機能の不具合を修正。
+　「動画再生プレーヤー」への自動スクロールコール部分に起因する不具合を修正。
+ver.2.0　(2012/07/01更新)
+　オプション設定画面、ヘルプ画面を追加。
+ver.1.5　(2012/06/29更新)
+　Chrome対応　(イベントの変更：DOMNodeInserted→DOMSubtreeModified、keypress→keydown。
+　　　　　　　　スクリプトの挿入先の変更：location.href→<script>タグ)
+ver.1.4.2　(2012/06/28更新)
+プレイリスト上の動画移動時、チャンネル動画をまたぐと、動画情報(i)にユーザーお気に入りボタンが表示される問題を修正(スタイルシートに"!important"を追加)
+次の動画、前の動画、でNicoPlayerConnectorまたはPlayerConfigが取得ができていない状態のときに、何もしないように変更。
+ver.1.4.1　(2012/06/27更新)
+　ページ更新を伴わない動画読み込み時の関数多重コールを防ぐための修正。
+　namespaceの変更。
+ver.1.4　(2012/06/26更新)
+　ページ更新を伴わない動画読み込み時にも動画情報の内容が更新されるようにした。
+　最初から動画情報を表示する機能を追加(SHOW_vInfo_ONLOAD　true:有効、false:無効)
+　動画プレーヤの位置を基準にスクロールする機能(s)の実装
+　ページ読み込み時や動画読み込み時に動画プレーヤの位置を基準に自動スクロールする機能を追加。
+　　(AUTO_SCROLL true:有効、false:無効 SCROLL_VALUE:動画プレーヤより上に確保するスペースのピクセル数)
+　ページ更新を伴わない動画読み込み時にも動画情報の内容が更新されるようにした。
+　コメント表示非表示の切り替え(新方式)のキー割り当て(f)を削除
+ver.1.3　(2012/06/25更新)
+　画面左上にサムネイル、投稿日、再生コメントマイリスト数、投稿者名(チャンネル動画の場合はチャンネル名)を表示する機能の実装(i)
+ver.1.2　(2012/06/24更新)
+　ZeroWatch側の機能(c:コメント入力欄へのカーソル移動)に上書きされていた、コメントの表示非表示切り替え機能(旧方式)のキー割り当てを変更(v)
+　コメントの表示非表示切り替え機能(新方式)の実装(f)
+　スクリプト終了機能(q)の実装
+ver.1.1　(2012/06/24更新)
+　処理待ち、イベントリスナ登録の方法を変更。エラー強制終了時にイベントリスナを全て解除。
+ver.1.0.3　(2012/06/23更新)
+　ニコ生、Nsenで動作しないように@include文を修正。
+ver.1.0.2　(2012/06/23更新)
+　"text"タイプ以外の"INPUT"要素にフォーカスが当たっている場合でも、キーボード操作が無効になっていた不具合を修正。
+vers.1.0.1(2012/06/23更新)
+　flashplayerのフォーカスが外れない不具合を修正。
+ver.1.0(2012/06/23更新) 
+*/
 
 function main() {
 	(function (unsafeWindow) {
@@ -790,7 +793,7 @@ function main() {
 //						+" 実際の移動先："+time_format(FLVPLAYER.ext_getPlayheadTime(),0)
 //						+" 判定基準："+time_format((time_to_set+base_time)/2,0)	
 					,1000);
-				if (FLVPLAYER.ext_getPlayheadTime()>(time_to_set+base_time)/2) break;
+				if (FLVPLAYER.ext_getPlayheadTime()>(time_to_set+base_time)/2|time_to_set_act<=0|time_to_set_act>=total_time) break;
 //				show_message("設定時間："+(time_to_set+plus_time)+" plus_time:"+plus_time,1000);
 				plus_time=plus_time+2;
 			}
@@ -814,7 +817,7 @@ function main() {
 				time_to_set=seek(base_time - parseInt(NCfZ_OS_lS.getValue("NCfZ_NormalMove")), total_time);
 			
 			var plus_time = 0;
-			var time_to_set_act
+			var time_to_set_act;			
 			while(true){
 				time_to_set_act = time_to_set-plus_time;
 				FLVPLAYER.ext_setPlayheadTime(time_to_set_act);
@@ -822,7 +825,7 @@ function main() {
 //						+" 実際の移動先："+time_format(FLVPLAYER.ext_getPlayheadTime(),0)
 //						+" 判定基準："+time_format((time_to_set+base_time)/2,0)
 					,1000);
-				if (FLVPLAYER.ext_getPlayheadTime()<(time_to_set+base_time)/2) break;
+				if (FLVPLAYER.ext_getPlayheadTime()<(time_to_set+base_time)/2|time_to_set_act<=0|time_to_set_act>=total_time) break;
 //				show_message("設定時間："+(time_to_set+plus_time)+" plus_time:"+plus_time,1000);
 				plus_time=plus_time+2;
 			}
